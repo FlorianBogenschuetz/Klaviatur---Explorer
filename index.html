@@ -8,6 +8,32 @@
     <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .piano-container {
+            transform: scale(0.85);
+            transform-origin: center;
+        }
+        @media (max-width: 1024px) {
+            .piano-container {
+                transform: scale(0.7);
+            }
+        }
+        @media (max-width: 768px) {
+            .piano-container {
+                transform: scale(0.55);
+            }
+        }
+        @media (max-width: 640px) {
+            .piano-container {
+                transform: scale(0.4);
+            }
+        }
+        @media (max-width: 480px) {
+            .piano-container {
+                transform: scale(0.32);
+            }
+        }
+    </style>
 </head>
 <body>
     <div id="root"></div>
@@ -157,10 +183,12 @@
                             </div>
                         </div>
 
-                        <div className="bg-white rounded-lg shadow-lg p-6 mb-6 overflow-x-auto">
+                        <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
                             <h2 className="text-2xl font-bold text-gray-800 mb-4">Klaviatur (2 Oktaven):</h2>
-                            <div className="flex justify-center">
-                                {[0, 1].map(octave => renderOctave(octave))}
+                            <div className="flex justify-center w-full py-4">
+                                <div className="piano-container inline-flex">
+                                    {[0, 1].map(octave => renderOctave(octave))}
+                                </div>
                             </div>
                             <p className="text-center text-gray-600 mt-6 text-sm">
                                 ● = Töne des gewählten Akkords
