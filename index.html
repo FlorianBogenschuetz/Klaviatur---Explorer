@@ -31,9 +31,39 @@
                 'Am': { name: 'A-Moll', notes: ['A', 'C', 'E'], color: 'bg-orange-400' }
             };
 
-            const isNoteInChord = (note) => {
+            // Finde die Position des Grundtons im ersten Auftreten
+            const findFirstOccurrence = (note) => {
+                const whiteNotes = ['C', 'D', 'E', 'F', 'G', 'A', 'H'];
+                const allNotes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'H'];
+                
+                // Finde den Index des Grundtons (erste Note im Akkord)
+                const rootNote = chords[selectedChord].notes[0];
+                const rootIndex = allNotes.indexOf(rootNote);
+                
+                // Finde den Index der aktuellen Note
+                const currentIndex = allNotes.indexOf(note);
+                
+                return { rootIndex, currentIndex };
+            };
+
+            const isNoteInChord = (note, octaveNum) => {
                 const chordNotes = chords[selectedChord].notes;
-                return chordNotes.includes(note);
+                if (!chordNotes.includes(note)) return false;
+                
+                // Überprüfe ob diese Note in der richtigen Oktave ist
+                const allNotes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'H'];
+                const rootNote = chordNotes[0];
+                const rootIndex = allNotes.indexOf(rootNote);
+                const currentIndex = allNotes.indexOf(note);
+                
+                // Wenn wir in Oktave 0 sind
+                if (octaveNum === 0) {
+                    // Zeige nur Noten die >= Grundton sind
+                    return currentIndex >= rootIndex;
+                } else {
+                    // In Oktave 1: Zeige nur Noten die < Grundton sind
+                    return currentIndex < rootIndex;
+                }
             };
 
             const renderOctave = (octaveNum) => {
@@ -50,7 +80,7 @@
                     <div key={octaveNum} className="relative inline-block">
                         <div className="flex">
                             {whiteNotes.map((note, idx) => {
-                                const isActive = isNoteInChord(note);
+                                const isActive = isNoteInChord(note, octaveNum);
                                 return (
                                     <div
                                         key={`white-${octaveNum}-${note}-${idx}`}
@@ -68,7 +98,7 @@
                         </div>
 
                         {blackNotes.map(({ note, position }) => {
-                            const isActive = isNoteInChord(note);
+                            const isActive = isNoteInChord(note, octaveNum);
                             const leftOffset = position * 56 + 56 - 20;
                             
                             return (
